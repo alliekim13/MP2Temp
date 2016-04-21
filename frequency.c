@@ -42,7 +42,7 @@ for (i=0; i<256; i++) Table[i].count = 0;  // Initialize table
 // Check if there are two arguments 
 if (argc != 3) {
    printf("Usage:  frequency367 <input data file> <output list file>\n");
-   return;
+   return 0;
    }
 
 // Read in codebook file
