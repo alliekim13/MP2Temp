@@ -8,15 +8,74 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAXSIZE 10000
+#include "huffmanutil.h"
+#define MAXLENGTH 10000
+void encode(int c, uint8_t* codebook, int* size)
+{
+	if (c == 1) {
+		size++;
+	}
+	int i = 0;
+	for(i = 7; i >= 0; i--){
+		if((c & (1 << i)) != 0){
+			printf("1");
+			size++;
+     	}else{
+			printf("0");
+			size++;
+     	}
+	}
+		printf("\n"); 
+}
 
-typedef struct {
-    int freq;
-    char letter;
-    struct Node *left, *right;
-} Node;
+int CmpTrees(const void *x, const void *y)
+{
+	const Node **a = (const Node **) x;
+	const Node **b = (const Node **) y;
+	if ((*a)->freq == (*b)->freq) return 0;
+	else if ((*a)->freq < (*b)->freq) return 1;
+	else return -1;
+}
 
-main(int argc, char *argv[])
+void VLRTraverseTree(Node *node)
+{
+	if (node != NULL) {
+		//dec2bin(node->letter);
+		VLRTraverseTree(node->left);
+		VLRTraverseTree(node->right);
+	}
+}
+
+Node * buildTree(Node* array[], int size) 
+{
+	printf("BuildTree\n");
+	int i = 0;
+	while (size > 1)
+	{
+		Node *add = (Node *)malloc(sizeof(Node));
+		for (i = 0; i < size; i++)
+		{
+			printf("%d\n", array[i]->letter);
+		}
+		qsort(array, size, sizeof(Node *), CmpTrees);
+		for (i = 0; i < size; i++)
+		{
+			printf("%d\n", array[i]->letter);
+		}
+		size -= 1;
+		add -> left = array[size];
+		size -=1;
+		add -> right = array[size];
+		add->freq = add->right->freq + add->left->freq;
+		add->letter = 1;
+		//printf("Freq: %f\n", add->freq);
+		array[size++] = add;
+	}
+	return array[0];
+}
+
+
+int main(int argc, char *argv[])
 {
     FILE *fp1, *fp2;
     int i;
@@ -28,7 +87,6 @@ main(int argc, char *argv[])
     Node * array[MAXSIZE];    
     if (argc != 3) {
 	printf("Usage: createcode367 <frequency file> <codebook file>\n");
-	return 0;
     }
 
     fp1 = fopen(argv[1], "r");
@@ -37,33 +95,26 @@ main(int argc, char *argv[])
     fgets(charcount, sizeof charcount, fp1);
     printf("Charcount: %s\n", charcount); 
     i=0;
+    int size = 0;
+    // Add frequencies to queue
     while (fgets(freqline, sizeof freqline, fp1)) {
-	p = NULL;
-	p = strtok(freqline, " \n");
-	strcpy(tletter, p);
-	printf("Tletter: %s\n", tletter);
-	p = strtok(NULL, " \n");
-	strcpy(tfreq, p);
-	printf("Tfreq: %s\n", tfreq);
-    }
-    fclose(fp1);
-    /*
-    while (fgets(freqline, sizeof freqline, fp1) != NULL) {
-	    printf("%s", freqline);
-	    p=strtok(freqline, "  ");	
-	    strcpy(tletter, p);
-	    while (p != NULL) {
-		printf("%s\n", p);
-		p=strtok(NULL, "\n"); 
+		p = NULL;
+		p = strtok(freqline, " \n");
+		strcpy(tletter, p);
+		p = strtok(NULL, " \n");
 		strcpy(tfreq, p);
-	    }
-	    //strcpy(tfreq, p);
-	    //printf("Letter: %d\n", atoi(tletter));
-	    //printf("Frequency: %d\n", atoi(tfreq));
-	    i++;
-
-    }*/
-
+		Node * toadd = (Node *)calloc(1, sizeof(Node));
+		printf("%d\n", atoi(tletter));
+		printf("%f\n", atof(tfreq));
+		toadd -> letter = atoi(tletter);
+		toadd -> freq = atof(tfreq);
+		toadd -> right = NULL;
+		toadd -> left = NULL;
+		array[size++] = toadd;
+	}
+	Node *node = buildTree(array, size);
+	VLRTraverseTree(node);
 }
+
 
 
