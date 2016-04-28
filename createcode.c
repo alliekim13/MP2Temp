@@ -10,22 +10,49 @@
 #include <string.h>
 #include "huffmanutil.h"
 #define MAXLENGTH 10000
-void encode(int c, uint8_t* codebook, int* size)
-{
-	if (c == 1) {
-		size++;
-	}
+
+/*void writeHeader(int c, FILE *out) {
 	int i = 0;
 	for(i = 7; i >= 0; i--){
 		if((c & (1 << i)) != 0){
-			printf("1");
-			size++;
+			bits = 1;
      	}else{
-			printf("0");
-			size++;
-     	}
+			bits = 0;
+		}
+		fprintf(out, "%d", bits);
 	}
-		printf("\n"); 
+}*/
+void writeEncoded(int c, FILE* out)
+{	printf("encoding: %d\n", c);
+	int bits;
+	if (c == 1) {
+		bits = 1;
+	fprintf(out, "%d", bits);
+	}
+	else {
+		fprintf(out, "0");
+		int i = 0;
+		for(i = 7; i >= 0; i--){
+			if((c & (1 << i)) != 0){
+				bits = 1;
+	     	}else{
+				bits = 0;
+			}
+			fprintf(out, "%d", bits);
+		}
+	}
+	printf("writing out\n");
+	printf("wrote out\n");
+}
+
+void encode(Node *node, FILE* out)
+{
+	printf("encoding\n");
+	if (node!=NULL) {
+		writeEncoded(node->letter, out);
+		encode(node->left, out);
+		encode(node->right, out);
+	}
 }
 
 int CmpTrees(const void *x, const void *y)
@@ -37,14 +64,14 @@ int CmpTrees(const void *x, const void *y)
 	else return -1;
 }
 
-void VLRTraverseTree(Node *node)
+/*void VLRTraverseTree(Node *node)
 {
 	if (node != NULL) {
 		//dec2bin(node->letter);
 		VLRTraverseTree(node->left);
 		VLRTraverseTree(node->right);
 	}
-}
+}*/
 
 Node * buildTree(Node* array[], int size) 
 {
@@ -113,7 +140,8 @@ int main(int argc, char *argv[])
 		array[size++] = toadd;
 	}
 	Node *node = buildTree(array, size);
-	VLRTraverseTree(node);
+	encode(node, fp2);
+	fclose(fp2);
 }
 
 
