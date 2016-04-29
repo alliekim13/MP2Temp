@@ -10,18 +10,40 @@
 #include <string.h>
 #include "huffmanutil.h"
 #define MAXLENGTH 10000
+#define MAXBITS 100000
+#define HEADER_LENGTH 14
+#define NONLEAF 1
 
-/*void writeHeader(int c, FILE *out) {
+void countBits(Node * node, int * bitcount) {
+	if (node != NULL) {
+		if (node->letter == NONLEAF) {
+			*bitcount += 1;
+		}
+		else *bitcount += 9;
+		countBits(node->left, bitcount);
+		countBits(node->right, bitcount);
+	}
+	printf("Bits: %d\n", *bitcount);
+}
+
+void writeHeader(FILE *out, Node * node) {
+	int *bitcount;
+	*bitcount = 0;
+	countBits(node, bitcount);
+	*bitcount += HEADER_LENGTH;
+	int bits;
 	int i = 0;
-	for(i = 7; i >= 0; i--){
-		if((c & (1 << i)) != 0){
+	for(i = 13; i >= 0; i--){
+		if((*bitcount & (1 << i)) != 0){
 			bits = 1;
      	}else{
 			bits = 0;
 		}
 		fprintf(out, "%d", bits);
 	}
-}*/
+	fprintf(out, "\n");
+}
+
 void writeEncoded(int c, FILE* out)
 {	printf("encoding: %d\n", c);
 	int bits;
@@ -41,8 +63,6 @@ void writeEncoded(int c, FILE* out)
 			fprintf(out, "%d", bits);
 		}
 	}
-	printf("writing out\n");
-	printf("wrote out\n");
 }
 
 void encode(Node *node, FILE* out)
@@ -111,7 +131,8 @@ int main(int argc, char *argv[])
     char * p;
     char tletter[50];
     char tfreq[50];
-    Node * array[MAXSIZE];    
+    Node * array[MAXSIZE];   
+	char * bitstream[MAXBITS];
     if (argc != 3) {
 	printf("Usage: createcode367 <frequency file> <codebook file>\n");
     }
@@ -140,6 +161,7 @@ int main(int argc, char *argv[])
 		array[size++] = toadd;
 	}
 	Node *node = buildTree(array, size);
+	writeHeader(fp2, node);
 	encode(node, fp2);
 	fclose(fp2);
 }
