@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
 	Node *node = buildTree(array, size);
 	writeHeader(fp2, node);
 	encode(node, fp2);
+	fclose(fp1);
 	fclose(fp2);
 }
 
