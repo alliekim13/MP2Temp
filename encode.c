@@ -100,12 +100,11 @@ int main(int argc, char *argv[])
 	for (j=0;j<14;j++)
 	{
 		if (fileLine[j]==(1+'0')) 
-			filesize += pow((double)2, (double)(13-j));
+			filesize += pow((double)2, (double)(14-j-1));
 	}
 	fgets(fileLine, sizeof(fileLine), fp1);
 	printf("File size: %d\n", filesize);
 	buildTree(&root, fileLine, &i, filesize);
-	VLRTraverseTree(root);
 	codeEntry codebook[256];
 	for (j = 0; j < 256; ++j) {
 		codebook[j].codeLength = 0;
@@ -113,6 +112,10 @@ int main(int argc, char *argv[])
 	encodeEntry(root, codebook, code, 0);
 	for (j=0;j<256;j++)
 		printf("%d = %s\n", j, codebook[j].code);
+	int c;
+	while ((c = fgetc(fp2)) != EOF) {
+		fprintf(fp3, "%s", codebook[c].code);
+	}
 	fclose(fp1);
 	fclose(fp2);
 	fclose(fp3);
