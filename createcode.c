@@ -10,37 +10,44 @@
 #include <string.h>
 #include "huffmanutil.h"
 #define MAXLENGTH 10000
-#define MAXBITS 100000
+#define MAXBITS 1000000
 #define HEADER_LENGTH 14
 #define NONLEAF 1
 
 void countBits(Node * node, int * bitcount) {
+	printf("counting bits\n");
 	if (node != NULL) {
 		if (node->letter == NONLEAF) {
-			*bitcount += 1;
+			(*bitcount) += 1;
 		}
-		else *bitcount += 9;
+		else (*bitcount) += 9;
 		countBits(node->left, bitcount);
 		countBits(node->right, bitcount);
 	}
 	printf("Bits: %d\n", *bitcount);
+	return;
 }
 
 void writeHeader(FILE *out, Node * node) {
-	int *bitcount;
+	int *bitcount = (int *)malloc(sizeof(int));
 	*bitcount = 0;
+	printf("About to count bits\n");
 	countBits(node, bitcount);
 	*bitcount += HEADER_LENGTH;
 	int bits;
 	int i = 0;
+	printf("Bitcount:%d\n", *bitcount);
 	for(i = 13; i >= 0; i--){
-		if((*bitcount & (1 << i)) != 0){
+		if(((*bitcount) & (1 << i)) != 0){
 			bits = 1;
      	}else{
 			bits = 0;
 		}
 		fprintf(out, "%d", bits);
 	}
+	
+	printf("losdfjkl");
+	/*return;*/
 	fprintf(out, "\n");
 }
 
@@ -67,7 +74,6 @@ void writeEncoded(int c, FILE* out)
 
 void encode(Node *node, FILE* out)
 {
-	printf("encoding\n");
 	if (node!=NULL) {
 		writeEncoded(node->letter, out);
 		encode(node->left, out);
@@ -100,14 +106,14 @@ Node * buildTree(Node* array[], int size)
 	while (size > 1)
 	{
 		Node *add = (Node *)malloc(sizeof(Node));
-		for (i = 0; i < size; i++)
+		/*for (i = 0; i < size; i++)
 		{
 			printf("%d\n", array[i]->letter);
-		}
+		}*/
 		qsort(array, size, sizeof(Node *), CmpTrees);
 		for (i = 0; i < size; i++)
 		{
-			printf("%d\n", array[i]->letter);
+			printf("%f\n", array[i]->freq);
 		}
 		size -= 1;
 		add -> left = array[size];
@@ -115,7 +121,7 @@ Node * buildTree(Node* array[], int size)
 		add -> right = array[size];
 		add->freq = add->right->freq + add->left->freq;
 		add->letter = 1;
-		//printf("Freq: %f\n", add->freq);
+		printf("Freq: %f\n", add->freq);
 		array[size++] = add;
 	}
 	return array[0];
@@ -135,10 +141,14 @@ int main(int argc, char *argv[])
 	char * bitstream[MAXBITS];
     if (argc != 3) {
 	printf("Usage: createcode367 <frequency file> <codebook file>\n");
+	return 0;
     }
-
+    fp1 = fp2 = NULL;
     fp1 = fopen(argv[1], "r");
     fp2 = fopen(argv[2], "w");
+
+    if (fp1 == NULL || fp2 == NULL)
+	printf("issue!!!!\n");
 
     fgets(charcount, sizeof charcount, fp1);
     printf("Charcount: %s\n", charcount); 
@@ -152,15 +162,16 @@ int main(int argc, char *argv[])
 		p = strtok(NULL, " \n");
 		strcpy(tfreq, p);
 		Node * toadd = (Node *)calloc(1, sizeof(Node));
-		printf("%d\n", atoi(tletter));
-		printf("%f\n", atof(tfreq));
+		printf("Letter: %d\n", atoi(tletter));
+		printf("Frequency: %f\n", atof(tfreq));
 		toadd -> letter = atoi(tletter);
 		toadd -> freq = atof(tfreq);
 		toadd -> right = NULL;
 		toadd -> left = NULL;
 		array[size++] = toadd;
 	}
-	Node *node = buildTree(array, size);
+	Node *node;
+	node = buildTree(array, size);
 	writeHeader(fp2, node);
 	encode(node, fp2);
 	fclose(fp1);
