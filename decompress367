@@ -1,9 +1,9 @@
 #!/bin/bash
 
 INPUTFILE=$1
-CODEBOOK="codebook"
-ENCODED="encoded"
+CODEBOOK="codebookdscript"
+ENCODED="encodeddscript"
 
 decodesplit367 $1 $CODEBOOK $ENCODED
-decode367 $CODEBOOK $ENCODED ${INPUT%.*}.out
+decode367 $CODEBOOK $ENCODED $1.out
 

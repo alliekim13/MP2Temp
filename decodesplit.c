@@ -15,26 +15,35 @@ int main(int argc, char *argv[]) {
 	compressed = fopen(argv[1], "r");
 	codebook = fopen(argv[2], "w");
 	encoded = fopen(argv[3], "w");
-	printf("Hi\n");
+	printf("Filesize:");
 	for (i = 0; i < 14; i++)
 	{	
 		c = fgetc(compressed);
+		printf("%d", c - '0');
+		fprintf(codebook, "%d", c-'0');
 		if (c == '1') {
 			sum += pow((double)2, (double)(14-i-1));
 		}
 	}
-	printf("Hi2\n");
-	fgets(codefile, sizeof(codefile), compressed);
+	fprintf(codebook, "\n");
+	printf("File size decode split: %d\n", sum);
+	//printf("Hi2\n");
+	//fgets(codefile, sizeof(codefile), compressed);
+	//printf("Codefile:%s\n", &codefile);
 	i = 0;
 	while ((c = fgetc(compressed)) != EOF) {	
 		if (c != EOF) {
-			if (i >= 14 && i < sum) {
+			if (i >= 1 && i < sum-14 + 1) {
 				fprintf(codebook, "%d", c-'0');
+				printf("%d", c-'0');
 			}
-			else if (i >= sum) {
+			else if (i >= sum - 14 + 1) {
 				fprintf(encoded, "%d", c-'0');
 			}
 		}
 		i++;
-	}	
+	}
+	fclose(compressed);
+	fclose(codebook);
+	fclose(encoded);	
 }
