@@ -15,7 +15,7 @@
 #define NONLEAF 1
 
 void countBits(Node * node, int * bitcount) {
-	printf("counting bits\n");
+	//printf("counting bits\n");
 	if (node != NULL) {
 		if (node->letter == NONLEAF) {
 			(*bitcount) += 1;
@@ -24,19 +24,19 @@ void countBits(Node * node, int * bitcount) {
 		countBits(node->left, bitcount);
 		countBits(node->right, bitcount);
 	}
-	printf("Bits: %d\n", *bitcount);
+	//printf("Bits: %d\n", *bitcount);
 	return;
 }
 
 void writeHeader(FILE *out, Node * node) {
 	int *bitcount = (int *)malloc(sizeof(int));
 	*bitcount = 0;
-	printf("About to count bits\n");
+	//printf("About to count bits\n");
 	countBits(node, bitcount);
 	*bitcount += HEADER_LENGTH;
 	int bits;
 	int i = 0;
-	printf("Bitcount:%d\n", *bitcount);
+	//printf("Bitcount:%d\n", *bitcount);
 	for(i = 13; i >= 0; i--){
 		if(((*bitcount) & (1 << i)) != 0){
 			bits = 1;
@@ -46,13 +46,13 @@ void writeHeader(FILE *out, Node * node) {
 		fprintf(out, "%d", bits);
 	}
 	
-	printf("losdfjkl");
+	//printf("losdfjkl");
 	/*return;*/
 	fprintf(out, "\n");
 }
 
 void writeEncoded(int c, FILE* out)
-{	printf("encoding: %d\n", c);
+{	//printf("encoding: %d\n", c);
 	int bits;
 	if (c == 1) {
 		bits = 1;
@@ -101,7 +101,7 @@ int CmpTrees(const void *x, const void *y)
 
 Node * buildTree(Node* array[], int size) 
 {
-	printf("BuildTree\n");
+	//printf("BuildTree\n");
 	int i = 0;
 	while (size > 1)
 	{
@@ -111,17 +111,17 @@ Node * buildTree(Node* array[], int size)
 			printf("%d\n", array[i]->letter);
 		}*/
 		qsort(array, size, sizeof(Node *), CmpTrees);
-		for (i = 0; i < size; i++)
+		/*for (i = 0; i < size; i++)
 		{
 			printf("%f\n", array[i]->freq);
-		}
+		}*/
 		size -= 1;
 		add -> left = array[size];
 		size -=1;
 		add -> right = array[size];
 		add->freq = add->right->freq + add->left->freq;
 		add->letter = 1;
-		printf("Freq: %f\n", add->freq);
+		//printf("Freq: %f\n", add->freq);
 		array[size++] = add;
 	}
 	return array[0];
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 	printf("issue!!!!\n");
 
     fgets(charcount, sizeof charcount, fp1);
-    printf("Charcount: %s\n", charcount); 
+    //printf("Charcount: %s\n", charcount); 
     i=0;
     int size = 0;
     // Add frequencies to queue
@@ -162,8 +162,8 @@ int main(int argc, char *argv[])
 		p = strtok(NULL, " \n");
 		strcpy(tfreq, p);
 		Node * toadd = (Node *)calloc(1, sizeof(Node));
-		printf("Letter: %d\n", atoi(tletter));
-		printf("Frequency: %f\n", atof(tfreq));
+		//printf("Letter: %d\n", atoi(tletter));
+		//printf("Frequency: %f\n", atof(tfreq));
 		toadd -> letter = atoi(tletter);
 		toadd -> freq = atof(tfreq);
 		toadd -> right = NULL;
