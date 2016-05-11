@@ -4,6 +4,6 @@ INPUTFILE=$1
 CODEBOOK="codebookdscript"
 ENCODED="encodeddscript"
 
-decodesplit367 $1 $CODEBOOK $ENCODED
-decode367 $CODEBOOK $ENCODED ${INPUTFILE%.*}.out
+./decodesplit367 $1 $CODEBOOK $ENCODED
+./decode367 $CODEBOOK $ENCODED ${INPUTFILE%.*}.out
 
