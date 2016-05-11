@@ -43,4 +43,4 @@ clean:
 	$(RM) *.o 
 
 real_clean: 
-	$(RM) *.o *~ codebook367 createcode367 decode367 decodesplit367 encode367 frequency367
+	$(RM) *.o *~ codebook367 createcode367 decode367 decodesplit367 encode367 frequency367 frequencylistscript codebookscript compressedscript codebookdscript encodeddscript  

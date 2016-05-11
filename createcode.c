@@ -102,7 +102,7 @@ int CmpTrees(const void *x, const void *y)
 Node * buildTree(Node* array[], int size) 
 {
 	//printf("BuildTree\n");
-	int i = 0;
+	//int i = 0;
 	while (size > 1)
 	{
 		Node *add = (Node *)malloc(sizeof(Node));
@@ -131,14 +131,14 @@ Node * buildTree(Node* array[], int size)
 int main(int argc, char *argv[])
 {
     FILE *fp1, *fp2;
-    int i;
+    //int i;
     char charcount[60];
     char freqline[50];
     char * p;
     char tletter[50];
     char tfreq[50];
     Node * array[MAXSIZE];   
-	char * bitstream[MAXBITS];
+	//char * bitstream[MAXBITS];
     if (argc != 3) {
 	printf("Usage: createcode367 <frequency file> <codebook file>\n");
 	return 0;
@@ -147,12 +147,12 @@ int main(int argc, char *argv[])
     fp1 = fopen(argv[1], "r");
     fp2 = fopen(argv[2], "w");
 
-    if (fp1 == NULL || fp2 == NULL)
-	printf("issue!!!!\n");
+    //if (fp1 == NULL || fp2 == NULL)
+    //	printf("issue!!!!\n");
 
     fgets(charcount, sizeof charcount, fp1);
     //printf("Charcount: %s\n", charcount); 
-    i=0;
+    //i=0;
     int size = 0;
     // Add frequencies to queue
     while (fgets(freqline, sizeof freqline, fp1)) {

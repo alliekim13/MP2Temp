@@ -32,7 +32,7 @@ void buildTree (Node ** nodeptrptr, char input[], int* i, int size)
 		//(*nodeptrptr)->right = NULL;
 		//(*nodeptrptr)->left = NULL;
 		(*i)+=8;
-		printf("Building tree\n");
+		//printf("Building tree\n");
 		return;
 	}
 	(*nodeptrptr)->letter = -1;
@@ -75,21 +75,21 @@ int main(int argc, char *argv[]) {
 	//printf("File size: %s\n", fileLine);
 	for (j=0;j<14;j++)
 	{
-		printf("%d", fileLine[j]-'0');
+		//printf("%d", fileLine[j]-'0');
 		if (fileLine[j]==(1+'0')) 
 			filesize += pow((double)2, (double)(14-j-1));
 	}
 	fgets(fileLine, sizeof(fileLine), fp1);
-	printf("File size: %d\n", filesize);
+	//printf("File size: %d\n", filesize);
 	buildTree(&root, fileLine, &i, filesize);
 	char encoded[1000000];
 	fgets(encoded, sizeof(encoded), fp2);
 	int c;
-	char buff;
+	//char buff;
 	i = 0;
 	while (encoded[i] != '\0') {
 		c = decode(root, encoded, &i);
 		fprintf(fp3, "%c", (char)c);
 	}
-	printf("Reached end\n");
+	//printf("Reached end\n");
 }

@@ -1,0 +1,14 @@
+Allie Kim
+May 11, 2016
+Instructions to compile:
+	- Everything is working (up to Task 4)
+	- Type command "make all"
+	- To run compression script:
+		- Type "./compress367 <name of data file to be compressed>"
+	- To run decompression script:
+		- Type "./decompress367 <name of data file to be decompressed>"
+		- Note that the file to be decompressed must end in ".367"
+		- Output file will be "<file name>.out"
+Task 5 Compression Ratio:
+	- 
+

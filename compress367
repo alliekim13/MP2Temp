@@ -2,8 +2,8 @@
 
 OUTPUTFILE=$1".367"
 
-frequency367 $1 "frequencylistscript"
-createcode367 "frequencylistscript" "codebookscript"
-encode367 "codebookscript" $1 "compressedscript" 
+./frequency367 $1 "frequencylistscript"
+./createcode367 "frequencylistscript" "codebookscript"
+./encode367 "codebookscript" $1 "compressedscript" 
 cat "codebookscript" "compressedscript" > $OUTPUTFILE
 

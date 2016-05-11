@@ -36,7 +36,7 @@ void buildTree (Node ** nodeptrptr, char input[], int* i, int size)
 	(*nodeptrptr)->letter = -1;
 	(*nodeptrptr)->freq = 0;
 	(*i)+=1;
-	Node * nodeptrptr2 = ((*nodeptrptr)->left);
+	//Node * nodeptrptr2 = ((*nodeptrptr)->left);
 	buildTree(&((*nodeptrptr)->left), input, i, size);
 	buildTree(&((*nodeptrptr)->right), input, i, size);
 }
@@ -78,11 +78,11 @@ int main(int argc, char *argv[])
 {
     FILE *fp1, *fp2, *fp3;
     int i = 0;
-    char charcount[60];
-    char freqline[50];
-    char * p;
+    //char charcount[60];
+    //char freqline[50];
+    //char * p;
 	char code[256];
-    Node * array[MAXSIZE];
+    //Node * array[MAXSIZE];
     if (argc != 4) {
 		printf("Usage: createcode367 <codebook file> <data file> <compressed data file>\n");
 		return 0;
